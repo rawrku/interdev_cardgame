@@ -22,19 +22,20 @@ public class CardGameManager : MonoBehaviour
     public List<GameObject> playerHand = new List<GameObject>();
     public int playerHandCount;
     public Transform playerPos;
-    public Transform playerPlay;
+    public Transform playerCard;
+    GameObject playerPlayed;
 
     //copmuter hand vars
     public List<GameObject> computerHand = new List<GameObject>();
     public int computerHandCount;
     public Transform computerPos;
-    public Transform computerPlay;
+    public Transform compCard;
+    GameObject compPlayed;
 
     int maxTimer = 20;
     int timer = 20;
     int revealTimer;
-
-
+    float hoverAmount = 0.5f;
 
     private void Start()
     {
@@ -43,6 +44,7 @@ public class CardGameManager : MonoBehaviour
 
     private void FixedUpdate()
     {
+
         switch (state)
         {
             case GameState.COMPDEAL:
@@ -95,6 +97,18 @@ public class CardGameManager : MonoBehaviour
                 }
                 break;
             case GameState.PLAYERCHOOSE:
+                foreach (GameObject card in playerHand)
+                {
+                    if (card.GetComponent<Card>().hovered)
+                    {
+                        card.GetComponent<Card>().SetTargetPos(new Vector3(card.transform.position.x, playerPos.position.y + hoverAmount));
+
+                    } else
+                    {
+                        card.GetComponent<Card>().SetTargetPos(new Vector3(card.transform.position.x, playerPos.position.y));
+                    }
+
+                }
                 break;
             case GameState.RESOLVE:
                 break;
@@ -129,7 +143,8 @@ public class CardGameManager : MonoBehaviour
     void CompChooseCard()
     {
         GameObject randomCard = computerHand[Random.Range(0, 2)];
-        Vector3 newPos = computerPlay.transform.position;
+        Vector3 newPos = compCard.transform.position;
         randomCard.GetComponent<Card>().SetTargetPos(newPos);
+        compPlayed = randomCard;
     }
 }

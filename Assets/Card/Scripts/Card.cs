@@ -15,6 +15,8 @@ public class Card : MonoBehaviour
     private Vector3 targetPos;
     float moveSpeed = 0.05f;
 
+    public bool hovered;
+
     private void Start()
     {
         myRenderer = GetComponent<SpriteRenderer>();
@@ -41,16 +43,14 @@ public class Card : MonoBehaviour
         targetPos = newPos;
         targetPos.z = 0;
     }
-    //public void OnMouseOver()
-    //{
-    //    Vector3 hover = myRenderer.transform.position;
-    //    hover.y = hover.y + 5f;
-       
-    //}
 
-    //public void OnMouseExit()
-    //{
-    //    Vector3 hover = myRenderer.transform.position;
-    //    hover.y = hover.y - 5f;
-    //}
+    public void OnMouseEnter()
+    {
+        hovered = true;
+    }
+
+    public void OnMouseExit()
+    {
+        hovered = false;    
+    }
 }

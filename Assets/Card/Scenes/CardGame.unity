@@ -270,11 +270,11 @@ MonoBehaviour:
   playerHand: []
   playerHandCount: 3
   playerPos: {fileID: 1647524971}
-  playerPlay: {fileID: 2050571543}
+  playerCard: {fileID: 2050571543}
   computerHand: []
   computerHandCount: 3
   computerPos: {fileID: 898639206}
-  computerPlay: {fileID: 1340527688}
+  compCard: {fileID: 1340527688}
 --- !u!4 &975409548
 Transform:
   m_ObjectHideFlags: 0
