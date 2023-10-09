@@ -7,8 +7,10 @@ public class CardGameManager : MonoBehaviour
 
     public enum GameState
     {
-        DEAL,
-        CHOOSE,
+        COMPDEAL,
+        PLAYERDEAL,
+        COMPCHOOSE,
+        PLAYERCHOOSE,
         RESOLVE,
         DISCARD,
         RESHUFFLE
@@ -26,28 +28,60 @@ public class CardGameManager : MonoBehaviour
     public int computerHandCount;
     public Transform computerPos;
 
+    int maxTimer = 20;
+    int timer = 20;
+    int revealTimer;
+
 
 
     private void Start()
     {
-        state = GameState.DEAL;
+        state = GameState.COMPDEAL;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         switch (state)
         {
-            case GameState.DEAL:
-                if (playerHand.Count < playerHandCount)
+            case GameState.COMPDEAL:
+                timer--;
+                if (timer <= 0)
                 {
-                    DealCard();
+                    if (computerHand.Count < computerHandCount)
+                    {
+                        CompDealCard();
+                    }
+                    else
+                    {
+                        state = GameState.PLAYERDEAL;
+                    }
 
-                } else 
-                {
-                    state = GameState.CHOOSE;
+                   timer = maxTimer;
                 }
                 break;
-            case GameState.CHOOSE:
+            case GameState.PLAYERDEAL:
+                timer--;
+                revealTimer++;
+                if (timer <= 0)
+                {
+                    if (playerHand.Count < playerHandCount)
+                    {
+                        PlayerDealCard();
+                        timer = maxTimer;
+                    }
+                }
+                if (revealTimer >= 70)
+                {
+                    for (int i = 0; i < playerHand.Count; i++)
+                    {
+                        playerHand[i].GetComponent<Card>().FlipCards();
+                        state = GameState.COMPCHOOSE;
+                    }
+                    revealTimer = 0;
+                }
+                break;
+            case GameState.COMPCHOOSE:
+                //ChooseCard();
                 break;
             case GameState.RESOLVE:
                 break;
@@ -58,29 +92,32 @@ public class CardGameManager : MonoBehaviour
         }
     }
 
-    void DealCard()
+    void CompDealCard()
     {
-
+        //copmuter cards
+        GameObject nextCard = DeckManager.deck[DeckManager.deck.Count - 1];
+        Vector3 newPos = computerPos.transform.position;
+        newPos.x = newPos.x + (2f * computerHand.Count);
+        nextCard.transform.position = newPos;
+        computerHand.Add(nextCard);
+        DeckManager.deck.Remove(nextCard);
+    }
+    void PlayerDealCard()
+    {
         //player cards
         GameObject nextCard = DeckManager.deck[DeckManager.deck.Count - 1];
         Vector3 newPos = playerPos.transform.position;
         newPos.x = newPos.x + (2f * playerHand.Count);
         nextCard.transform.position = newPos;
         playerHand.Add(nextCard);
-
-        for (int i = 0; i < playerHand.Count; i++)
-        {
-            playerHand[i].GetComponent<Card>().FlipCards();
-        }
-
         DeckManager.deck.Remove(nextCard);
+    }
 
-        //copmuter cards
-        GameObject compNextCard = DeckManager.deck[DeckManager.deck.Count - 1];
-        Vector3 compNewPos = computerPos.transform.position;
-        compNewPos.x = compNewPos.x + (2f * computerHand.Count);
-        compNextCard.transform.position = compNewPos;
-        computerHand.Add(compNextCard);
-        DeckManager.deck.Remove(compNextCard);
+    void ChooseCard()
+    {
+        //for (int i = 0; i < playerHand.Count; i++)
+        //{
+        //    playerHand[i].GetComponent<Card>().OnMouseOver();
+        //}
     }
 }

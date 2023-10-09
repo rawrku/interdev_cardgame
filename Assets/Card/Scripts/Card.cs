@@ -10,8 +10,6 @@ public class Card : MonoBehaviour
 
     SpriteRenderer myRenderer;
 
-    bool mouseOver = false;
-
     public CardGameManager gameMan;
 
     private void Start()
@@ -20,31 +18,29 @@ public class Card : MonoBehaviour
         gameMan = GetComponent<CardGameManager>();
 
         backSprite = myRenderer.sprite;
+
     }
 
     public void FlipCards()
     {
-        //for (var i = 0; i < gameMan.playerHand.Count; i++)
-        //{
-        //    gameMan.playerHand[i].myRenderer = faceSprite;
-        //}
         myRenderer.sprite = faceSprite;
-
-
-
-
     }
 
     private void Update()
     {
-        //if (mouseOver)
-        //{
-          
-        //}
+
     }
 
-    //void OnMouseDown()
+    //public void OnMouseOver()
     //{
-    //    mouseOver = true;
+    //    Vector3 hover = myRenderer.transform.position;
+    //    hover.y = hover.y + 5f;
+       
+    //}
+
+    //public void OnMouseExit()
+    //{
+    //    Vector3 hover = myRenderer.transform.position;
+    //    hover.y = hover.y - 5f;
     //}
 }
