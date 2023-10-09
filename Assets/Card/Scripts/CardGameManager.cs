@@ -98,7 +98,7 @@ public class CardGameManager : MonoBehaviour
         GameObject nextCard = DeckManager.deck[DeckManager.deck.Count - 1];
         Vector3 newPos = computerPos.transform.position;
         newPos.x = newPos.x + (2f * computerHand.Count);
-        nextCard.transform.position = newPos;
+        nextCard.GetComponent<Card>().SetTargetPos(newPos);
         computerHand.Add(nextCard);
         DeckManager.deck.Remove(nextCard);
     }
@@ -108,7 +108,7 @@ public class CardGameManager : MonoBehaviour
         GameObject nextCard = DeckManager.deck[DeckManager.deck.Count - 1];
         Vector3 newPos = playerPos.transform.position;
         newPos.x = newPos.x + (2f * playerHand.Count);
-        nextCard.transform.position = newPos;
+        nextCard.GetComponent<Card>().SetTargetPos(newPos);
         playerHand.Add(nextCard);
         DeckManager.deck.Remove(nextCard);
     }

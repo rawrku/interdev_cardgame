@@ -7,10 +7,13 @@ public class Card : MonoBehaviour
     public Sprite faceSprite;
 
     Sprite backSprite;
-
+ 
     SpriteRenderer myRenderer;
 
     public CardGameManager gameMan;
+
+    private Vector3 targetPos;
+    float moveSpeed = 0.05f;
 
     private void Start()
     {
@@ -18,6 +21,8 @@ public class Card : MonoBehaviour
         gameMan = GetComponent<CardGameManager>();
 
         backSprite = myRenderer.sprite;
+
+        targetPos = transform.position;
 
     }
 
@@ -28,9 +33,14 @@ public class Card : MonoBehaviour
 
     private void Update()
     {
-
+        transform.position = Vector3.Lerp(transform.position, targetPos, moveSpeed);
     }
 
+    public void SetTargetPos(Vector3 newPos)
+    {
+        targetPos = newPos;
+        targetPos.z = 0;
+    }
     //public void OnMouseOver()
     //{
     //    Vector3 hover = myRenderer.transform.position;
