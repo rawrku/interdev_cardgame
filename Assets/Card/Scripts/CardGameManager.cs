@@ -22,11 +22,13 @@ public class CardGameManager : MonoBehaviour
     public List<GameObject> playerHand = new List<GameObject>();
     public int playerHandCount;
     public Transform playerPos;
+    public Transform playerPlay;
 
     //copmuter hand vars
     public List<GameObject> computerHand = new List<GameObject>();
     public int computerHandCount;
     public Transform computerPos;
+    public Transform computerPlay;
 
     int maxTimer = 20;
     int timer = 20;
@@ -81,7 +83,18 @@ public class CardGameManager : MonoBehaviour
                 }
                 break;
             case GameState.COMPCHOOSE:
-                //ChooseCard();
+                timer--;
+                if (timer <= -35)
+                {
+                    if (computerHand.Count == 3)
+                    {
+                        CompChooseCard();
+                        state = GameState.PLAYERCHOOSE;
+                    }
+                    timer = maxTimer;
+                }
+                break;
+            case GameState.PLAYERCHOOSE:
                 break;
             case GameState.RESOLVE:
                 break;
@@ -113,11 +126,10 @@ public class CardGameManager : MonoBehaviour
         DeckManager.deck.Remove(nextCard);
     }
 
-    void ChooseCard()
+    void CompChooseCard()
     {
-        //for (int i = 0; i < playerHand.Count; i++)
-        //{
-        //    playerHand[i].GetComponent<Card>().OnMouseOver();
-        //}
+        GameObject randomCard = computerHand[Random.Range(0, 2)];
+        Vector3 newPos = computerPlay.transform.position;
+        randomCard.GetComponent<Card>().SetTargetPos(newPos);
     }
 }
