@@ -24,15 +24,17 @@ public class Card : MonoBehaviour
     {
         ROCK,
         PAPER,
-        SCISSORS
+        SCISSORS,
+        NONE
     }
 
-    public CardValues cardValue;
+    //public CardValues cardValue;
 
-
+    public CardValues cardValue = CardValues.NONE;
 
     private void Start()
     {
+
         myRenderer = GetComponent<SpriteRenderer>();
         gameMan = GetComponent<CardGameManager>();
         deckMan = GetComponent<DeckManager>();
@@ -72,6 +74,10 @@ public class Card : MonoBehaviour
         {
             faceSprite = scissorsSprite;
         }
+    }
+    public CardValues GetValue()
+    {
+        return cardValue;
     }
 
     public void SetTargetPos(Vector3 newPos)

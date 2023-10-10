@@ -46,10 +46,6 @@ public class CardGameManager : MonoBehaviour
 
     //eval vars
     bool eval;
-    public bool pWin;
-    public bool pLoose;
-    public bool cWin;
-    public bool cLoose;
     public Score scoreMan;
     public Card card;
 
@@ -121,22 +117,23 @@ public class CardGameManager : MonoBehaviour
                 }
                 break;
             case GameState.PLAYERCHOOSE:
-                foreach (GameObject card in playerHand)
-                {
-                    if (card.GetComponent<Card>().hovered)
-                    {
-                        card.GetComponent<Card>().SetTargetPos(new Vector3(card.transform.position.x, playerPos.position.y + hoverAmount));
 
-                    } else
+                for (int i = 0; i < playerHand.Count; i++)
+                {
+                    if (playerHand[i].GetComponent<Card>().hovered)
                     {
-                        card.GetComponent<Card>().SetTargetPos(new Vector3(card.transform.position.x, playerPos.position.y));
+                        playerHand[i].GetComponent<Card>().SetTargetPos(new Vector3(playerHand[i].transform.position.x, playerPos.position.y + hoverAmount));
+
                     }
-                    if (card.GetComponent<Card>().picked)
+                    else
                     {
-                        GameObject pickedCard = card;
+                        playerHand[i].GetComponent<Card>().SetTargetPos(new Vector3(playerHand[i].transform.position.x, playerPos.position.y));
+                    }
+                    if (playerHand[i].GetComponent<Card>().picked)
+                    {
+                        GameObject pickedCard = playerHand[i];
                         Vector3 newPos = playerCard.transform.position;
                         pickedCard.GetComponent<Card>().SetTargetPos(newPos);
-                        playerHand.Remove(pickedCard);
                         playerPlayed = pickedCard;
                         state = GameState.RESOLVE;
                     }
@@ -182,8 +179,24 @@ public class CardGameManager : MonoBehaviour
                         }
                     }
                 }
+
+                if (timer <= -100)
+                {
+                    for(var i = 0; i < playerHand.Count; i++)
+                    {
+                        if (playerHand[i] == playerPlayed)
+                        {
+                            // add to discard pile and remove from hand
+                            GameObject card = playerHand[i];
+                            Vector3 newPos = discardPile.transform.position;
+                            card.GetComponent<Card>().SetTargetPos(newPos);
+                            playerHand.Remove(card);
+                            discardDeck.Add(card);
+                        }
+                    }
+                }
                 //15 sec later, if opponent hand has 2 cards
-                if (timer <= -100 && computerHand.Count == 2)
+                if (timer <= -150 && computerHand.Count == 2)
                 {
                     for (var i = 0; i < computerHand.Count; i++)
                     {
@@ -219,7 +232,7 @@ public class CardGameManager : MonoBehaviour
                     for (var i = 0; i < playerHand.Count; i++)
                     {
                         // add to discard pile and remove from hand
-                        GameObject card = computerHand[i];
+                        GameObject card = playerHand[i];
                         Vector3 newPos = discardPile.transform.position;
                         card.GetComponent<Card>().SetTargetPos(newPos);
                         playerHand.Remove(card);
@@ -233,7 +246,7 @@ public class CardGameManager : MonoBehaviour
                     for (var i = 0; i < playerHand.Count; i++)
                     {
                         // add to discard pile and remove from hand
-                        GameObject card = computerHand[i];
+                        GameObject card = playerHand[i];
                         Vector3 newPos = discardPile.transform.position;
                         card.GetComponent<Card>().SetTargetPos(newPos);
                         playerHand.Remove(card);
@@ -287,29 +300,60 @@ public class CardGameManager : MonoBehaviour
         randomCard.GetComponent<Card>().SetTargetPos(newPos);
         compPlayed = randomCard;
     }
-
-   
     void Evaluate()
     {
-        //if (compPlayed == Card.CardValues.ROCK)
-        //{
+        if (compPlayed.GetComponent<Card>().GetValue() == Card.CardValues.ROCK)
+        {
+            switch (playerPlayed.GetComponent<Card>().GetValue())
+            {
+                case Card.CardValues.ROCK:
+                    Tie();
+                    break;
+                case Card.CardValues.PAPER:
+                    Win();
+                    break;
+                case Card.CardValues.SCISSORS:
+                    Loose();
+                    break;
+            }
+        }
+        if (compPlayed.GetComponent<Card>().GetValue() == Card.CardValues.PAPER)
+        {
+            switch (playerPlayed.GetComponent<Card>().GetValue())
+            {
+                case Card.CardValues.ROCK:
+                    Loose();
+                    break;
+                case Card.CardValues.PAPER:;
+                    Tie();
+                    break;
+                case Card.CardValues.SCISSORS:
+                    Win();
+                    break;
+            }
+        }
 
-        //}
+        if (compPlayed.GetComponent<Card>().GetValue() == Card.CardValues.SCISSORS)
+        {
+            switch (playerPlayed.GetComponent<Card>().GetValue())
+            {
+                case Card.CardValues.ROCK:
+                    Win();
+                    break;
+                case Card.CardValues.PAPER:
+                    Loose();
+                    break;
+                case Card.CardValues.SCISSORS:
+                    Tie();
+                    break;
+            }
+        }
 
- 
     }
     void Win()
     {
-        if (pWin == true)
-        {
-            scoreMan.playerScore += 1;
-            pWin = false;
-        }
-        if (cWin == true)
-        {
-            scoreMan.compScore += 1;
-            cWin = false;
-        }
+        scoreMan.playerScore += 1;
+        scoreMan.compScore -= 1;
         state = GameState.DISCARD;
     }
     void Tie()
@@ -318,16 +362,8 @@ public class CardGameManager : MonoBehaviour
     }
     void Loose()
     {
-        if (pLoose == true)
-        {
-            scoreMan.playerScore += 1;
-            pLoose = false;
-        }
-        if (cLoose == true)
-        {
-            scoreMan.compScore += 1;
-            cLoose = false;
-        }
+        scoreMan.playerScore -= 1;
+        scoreMan.compScore += 1;
         state = GameState.DISCARD;
     }
 }
