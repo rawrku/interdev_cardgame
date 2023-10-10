@@ -16,6 +16,7 @@ public class CardGameManager : MonoBehaviour
         RESHUFFLE
     }
 
+
     public static GameState state;
 
     //player hand vars
@@ -32,31 +33,49 @@ public class CardGameManager : MonoBehaviour
     public Transform compCard;
     GameObject compPlayed;
 
+    //timer vars
     int maxTimer = 20;
     int timer = 20;
     int revealTimer;
+
+    //hover
     float hoverAmount = 0.5f;
+
+    //eval vars
+    bool eval;
+    public bool pWin;;
+    public bool pLoose;
+    public bool cWin;;
+    public bool cLoose;
+    public Score scoreMan;
 
     private void Start()
     {
         state = GameState.COMPDEAL;
+
+        scoreMan = GetComponent<Score>();
     }
 
     private void FixedUpdate()
     {
-
+        // re-setting the eval varaible to false so it can eval again after a shuffle
+        eval = false;
         switch (state)
         {
             case GameState.COMPDEAL:
                 timer--;
+                //after the set time has passed
                 if (timer <= 0)
                 {
+                    //if the 3 or less cards in the opponents's hand
                     if (computerHand.Count < computerHandCount)
                     {
+                        // run the function to deal the computer cards
                         CompDealCard();
                     }
                     else
                     {
+                        // otherwise go to the next state
                         state = GameState.PLAYERDEAL;
                     }
 
@@ -107,10 +126,37 @@ public class CardGameManager : MonoBehaviour
                     {
                         card.GetComponent<Card>().SetTargetPos(new Vector3(card.transform.position.x, playerPos.position.y));
                     }
-
+                    if (card.GetComponent<Card>().picked)
+                    {
+                        GameObject pickedCard = card;
+                        Vector3 newPos = playerCard.transform.position;
+                        pickedCard.GetComponent<Card>().SetTargetPos(newPos);
+                        playerHand.Remove(pickedCard);
+                        playerPlayed = pickedCard;
+                        state = GameState.RESOLVE;
+                    }
                 }
                 break;
             case GameState.RESOLVE:
+                timer--;
+                if (timer <= -100)
+                {
+                    // check the comp hand of cards
+                    for (int i = 0; i < computerHand.Count; i++)
+                    {
+                        // if the card in the comp hand was the played card
+                        if (computerHand[i] == compPlayed)
+                        {
+                            // reveal the face
+                            computerHand[i].GetComponent<Card>().FlipCards();
+
+                            if (eval == false)
+                            {
+                                Evaluate();
+                            }
+                        }
+                    }
+                }
                 break;
             case GameState.DISCARD:
                 break;
@@ -146,5 +192,42 @@ public class CardGameManager : MonoBehaviour
         Vector3 newPos = compCard.transform.position;
         randomCard.GetComponent<Card>().SetTargetPos(newPos);
         compPlayed = randomCard;
+    }
+
+    void Evaluate()
+    {
+ 
+    }
+    void Win()
+    {
+        if (pWin == true)
+        {
+            scoreMan.playerScore += 1;
+            pWin = false;
+        }
+        if (cWin == true)
+        {
+            scoreMan.compScore += 1;
+            cWin = false;
+        }
+        state = GameState.DISCARD;
+    }
+    void Tie()
+    {
+        state = GameState.DISCARD;
+    }
+    void Loose()
+    {
+        f(pLoose == true)
+        {
+            scoreMan.playerScore += 1;
+            ploose = false;
+        }
+        if (cLoose == true)
+        {
+            scoreMan.compScore += 1;
+            cLoose = false;
+        }
+        state = GameState.DISCARD;
     }
 }
