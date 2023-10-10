@@ -30,6 +30,7 @@ public class Card : MonoBehaviour
     public CardValues cardValue;
 
 
+
     private void Start()
     {
         myRenderer = GetComponent<SpriteRenderer>();
@@ -43,6 +44,9 @@ public class Card : MonoBehaviour
 
     }
 
+    public Sprite rockSprite;
+    public Sprite paperSprite;
+    public Sprite scissorsSprite;
 
 
     public void FlipCards()
@@ -56,13 +60,17 @@ public class Card : MonoBehaviour
 
         if (cardValue == CardValues.ROCK)
         {
-            for (int i = 0; i < deckMan.cardFaces.Length; i++)
-            {
-                if (deckMan.cardFaces[i].sprite == "rock")
-                {
-                    
-                }
-            }
+            faceSprite = rockSprite;
+        }
+
+        if (cardValue == CardValues.PAPER)
+        {
+            faceSprite = paperSprite;
+        }
+
+        if (cardValue == CardValues.SCISSORS)
+        {
+            faceSprite = scissorsSprite;
         }
     }
 

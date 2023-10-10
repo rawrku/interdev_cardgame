@@ -19,6 +19,9 @@ public class CardGameManager : MonoBehaviour
 
     public static GameState state;
 
+    public Transform discardPile;
+    public static List<GameObject> discardDeck = new List<GameObject>();
+
     //player hand vars
     public List<GameObject> playerHand = new List<GameObject>();
     public int playerHandCount;
@@ -43,17 +46,19 @@ public class CardGameManager : MonoBehaviour
 
     //eval vars
     bool eval;
-    public bool pWin;;
+    public bool pWin;
     public bool pLoose;
-    public bool cWin;;
+    public bool cWin;
     public bool cLoose;
     public Score scoreMan;
+    public Card card;
 
     private void Start()
     {
         state = GameState.COMPDEAL;
 
         scoreMan = GetComponent<Score>();
+        card = GetComponent<Card>();
     }
 
     private void FixedUpdate()
@@ -154,11 +159,100 @@ public class CardGameManager : MonoBehaviour
                             {
                                 Evaluate();
                             }
+                            eval = true;
                         }
                     }
+
+                    timer = maxTimer;
                 }
                 break;
             case GameState.DISCARD:
+                timer--;
+                if (timer <= -85)
+                {
+                    for (var i = 0; i < computerHand.Count; i++)
+                    {
+                        if (computerHand[i] == compPlayed)
+                        {
+                            GameObject card = computerHand[i];
+                            Vector3 newPos = discardPile.transform.position;
+                            card.GetComponent<Card>().SetTargetPos(newPos);
+                            computerHand.Remove(card);
+                            discardDeck.Add(card);
+                        }
+                    }
+                }
+                //15 sec later, if opponent hand has 2 cards
+                if (timer <= -100 && computerHand.Count == 2)
+                {
+                    for (var i = 0; i < computerHand.Count; i++)
+                    {
+                        //reveal card
+                        computerHand[i].GetComponent<Card>().FlipCards();
+                        // add to discard pile and remove from hand
+                        GameObject card = computerHand[i];
+                        Vector3 newPos = discardPile.transform.position;
+                        card.GetComponent<Card>().SetTargetPos(newPos);
+                        computerHand.Remove(card);
+                        discardDeck.Add(card);
+                    }
+                }
+
+                if (timer <= -130 && computerHand.Count == 1)
+                {
+                    for (var i = 0; i < computerHand.Count; i++)
+                    {
+                        //reveal card
+                        computerHand[i].GetComponent<Card>().FlipCards();
+                        // add to discard pile and remove from hand
+                        GameObject card = computerHand[i];
+                        Vector3 newPos = discardPile.transform.position;
+                        card.GetComponent<Card>().SetTargetPos(newPos);
+                        computerHand.Remove(card);
+                        discardDeck.Add(card);
+                    }
+                }
+
+                //15 sec later, if player hand has 2 cards
+                if (timer <= -145 && playerHand.Count == 2)
+                {
+                    for (var i = 0; i < playerHand.Count; i++)
+                    {
+                        // add to discard pile and remove from hand
+                        GameObject card = computerHand[i];
+                        Vector3 newPos = discardPile.transform.position;
+                        card.GetComponent<Card>().SetTargetPos(newPos);
+                        playerHand.Remove(card);
+                        discardDeck.Add(card);
+                    }
+                }
+
+                //15 sec later, if player hand has 1 card
+                if (timer <= -160 && playerHand.Count == 1)
+                {
+                    for (var i = 0; i < playerHand.Count; i++)
+                    {
+                        // add to discard pile and remove from hand
+                        GameObject card = computerHand[i];
+                        Vector3 newPos = discardPile.transform.position;
+                        card.GetComponent<Card>().SetTargetPos(newPos);
+                        playerHand.Remove(card);
+                        discardDeck.Add(card);
+                    }
+                }
+
+                if (timer <= -175)
+                {
+                    if (DeckManager.deck.Count > 0)
+                    {
+                        state = GameState.COMPDEAL;
+                    } else
+                    {
+                        state = GameState.RESHUFFLE;
+                    }
+
+                    timer = maxTimer;
+                }
                 break;
             case GameState.RESHUFFLE:
                 break;
@@ -194,8 +288,14 @@ public class CardGameManager : MonoBehaviour
         compPlayed = randomCard;
     }
 
+   
     void Evaluate()
     {
+        //if (compPlayed == Card.CardValues.ROCK)
+        //{
+
+        //}
+
  
     }
     void Win()
@@ -218,10 +318,10 @@ public class CardGameManager : MonoBehaviour
     }
     void Loose()
     {
-        f(pLoose == true)
+        if (pLoose == true)
         {
             scoreMan.playerScore += 1;
-            ploose = false;
+            pLoose = false;
         }
         if (cLoose == true)
         {

@@ -125,3 +125,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   faceSprite: {fileID: 0}
+  gameMan: {fileID: 0}
+  deckMan: {fileID: 0}
+  hovered: 0
+  picked: 0
+  cardValue: 0
+  rockSprite: {fileID: 21300000, guid: bbf82b246db8ffa4bad59a288a4b7049, type: 3}
+  paperSprite: {fileID: 21300000, guid: 83ace72bb8fee1c44986e4ae491f616a, type: 3}
+  scissorsSprite: {fileID: 21300000, guid: cdec885b6590528419fd0cdadfbea29e, type: 3}

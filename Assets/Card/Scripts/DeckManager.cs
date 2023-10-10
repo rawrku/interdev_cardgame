@@ -21,6 +21,7 @@ public class DeckManager : MonoBehaviour
 
     private void Start()
     {
+
        for (int i = 0; i < deckCount; i++)
         {
             GameObject newCard = Instantiate(cardPrefab, gameObject.transform);
