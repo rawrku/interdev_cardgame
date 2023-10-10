@@ -59,11 +59,11 @@ public class CardGameManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // re-setting the eval varaible to false so it can eval again after a shuffle
-        eval = false;
         switch (state)
         {
             case GameState.COMPDEAL:
+                // re-setting the eval varaible to false so it can eval again after a shuffle
+                eval = false;
                 timer--;
                 //after the set time has passed
                 if (timer <= 0)
@@ -138,6 +138,7 @@ public class CardGameManager : MonoBehaviour
                         state = GameState.RESOLVE;
                     }
                 }
+                
                 break;
             case GameState.RESOLVE:
                 timer--;

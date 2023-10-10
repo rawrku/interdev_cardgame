@@ -248,6 +248,7 @@ GameObject:
   m_Component:
   - component: {fileID: 975409548}
   - component: {fileID: 975409547}
+  - component: {fileID: 975409549}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -276,10 +277,6 @@ MonoBehaviour:
   computerHandCount: 3
   computerPos: {fileID: 898639206}
   compCard: {fileID: 1340527688}
-  pWin: 0
-  pLoose: 0
-  cWin: 0
-  cLoose: 0
   scoreMan: {fileID: 0}
   card: {fileID: 0}
 --- !u!4 &975409548
@@ -297,6 +294,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &975409549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 975409546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07dee439d9fdae54f82b952899c3618c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerScore: 0
+  compScore: 0
 --- !u!1 &1245237980
 GameObject:
   m_ObjectHideFlags: 0
@@ -470,4 +481,4 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 83ace72bb8fee1c44986e4ae491f616a, type: 3}
   - {fileID: 21300000, guid: bbf82b246db8ffa4bad59a288a4b7049, type: 3}
   - {fileID: 21300000, guid: cdec885b6590528419fd0cdadfbea29e, type: 3}
-  deckCount: 15
+  deckCount: 24

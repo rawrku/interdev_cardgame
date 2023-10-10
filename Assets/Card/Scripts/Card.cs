@@ -25,12 +25,9 @@ public class Card : MonoBehaviour
         ROCK,
         PAPER,
         SCISSORS,
-        NONE
     }
 
-    //public CardValues cardValue;
-
-    public CardValues cardValue = CardValues.NONE;
+    public CardValues cardValue;
 
     private void Start()
     {
