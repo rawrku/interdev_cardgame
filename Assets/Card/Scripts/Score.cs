@@ -36,16 +36,4 @@ public class Score : MonoBehaviour
         compScore += 1;
         computerScoreText.text = compScore.ToString();
     }
-
-    public void MinusPlayerPoint()
-    {
-        playerScore -= 1;
-        playerScoreText.text = playerScore.ToString();
-    }
-
-    public void MinusCompPoint()
-    {
-        compScore -= 1;
-        computerScoreText.text = compScore.ToString();
-    }
 }
