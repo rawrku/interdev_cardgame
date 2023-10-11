@@ -269,6 +269,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   discardPile: {fileID: 1245237981}
+  deckPos: {fileID: 2135336056}
   playerHand: []
   playerHandCount: 3
   playerPos: {fileID: 1647524971}

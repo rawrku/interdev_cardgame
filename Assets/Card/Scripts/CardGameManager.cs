@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+// this is so i can use the .Last() function
+using System.Linq;
 
 public class CardGameManager : MonoBehaviour
 {
@@ -21,6 +23,7 @@ public class CardGameManager : MonoBehaviour
 
     public Transform discardPile;
     public static List<GameObject> discardDeck = new List<GameObject>();
+    public Transform deckPos;
 
     //player hand vars
     public List<GameObject> playerHand = new List<GameObject>();
@@ -199,60 +202,49 @@ public class CardGameManager : MonoBehaviour
                 //15 sec later, if opponent hand has 2 cards
                 if (timer <= -150 && computerHand.Count == 2)
                 {
-                    for (var i = 0; i < computerHand.Count; i++)
-                    {
-                        //reveal card
-                        computerHand[i].GetComponent<Card>().FlipCards();
-                        // add to discard pile and remove from hand
-                        GameObject card = computerHand[i];
-                        Vector3 newPos = discardPile.transform.position;
-                        card.GetComponent<Card>().SetTargetPos(newPos);
-                        computerHand.Remove(card);
-                        discardDeck.Add(card);
-                    }
+                    //reveal card
+                    computerHand[0].GetComponent<Card>().FlipCards();
+                    // add to discard pile and remove from hand
+                    GameObject card = computerHand[0];
+                    Vector3 newPos = discardPile.transform.position;
+                    card.GetComponent<Card>().SetTargetPos(newPos);
+                    computerHand.Remove(card);
+                    discardDeck.Add(card);
                 }
 
                 if (timer <= -130 && computerHand.Count == 1)
                 {
-                    for (var i = 0; i < computerHand.Count; i++)
-                    {
-                        //reveal card
-                        computerHand[i].GetComponent<Card>().FlipCards();
-                        // add to discard pile and remove from hand
-                        GameObject card = computerHand[i];
-                        Vector3 newPos = discardPile.transform.position;
-                        card.GetComponent<Card>().SetTargetPos(newPos);
-                        computerHand.Remove(card);
-                        discardDeck.Add(card);
-                    }
+                    //reveal card
+                    computerHand[0].GetComponent<Card>().FlipCards();
+                    // add to discard pile and remove from hand
+                    GameObject card = computerHand[0];
+                    Vector3 newPos = discardPile.transform.position;
+                    card.GetComponent<Card>().SetTargetPos(newPos);
+                    computerHand.Remove(card);
+                    discardDeck.Add(card);
                 }
 
                 //15 sec later, if player hand has 2 cards
                 if (timer <= -145 && playerHand.Count == 2)
                 {
-                    for (var i = 0; i < playerHand.Count; i++)
-                    {
-                        // add to discard pile and remove from hand
-                        GameObject card = playerHand[i];
-                        Vector3 newPos = discardPile.transform.position;
-                        card.GetComponent<Card>().SetTargetPos(newPos);
-                        playerHand.Remove(card);
-                        discardDeck.Add(card);
-                    }
+
+                    // add to discard pile and remove from hand
+                    GameObject card = playerHand[0];
+                    Vector3 newPos = discardPile.transform.position;
+                    card.GetComponent<Card>().SetTargetPos(newPos);
+                    playerHand.Remove(card);
+                    discardDeck.Add(card);
                 }
 
                 //15 sec later, if player hand has 1 card
                 if (timer <= -160 && playerHand.Count == 1)
                 {
-                    for (var i = 0; i < playerHand.Count; i++)
-                    {
-                        // add to discard pile and remove from hand
-                        GameObject card = playerHand[i];
-                        Vector3 newPos = discardPile.transform.position;
-                        card.GetComponent<Card>().SetTargetPos(newPos);
-                        playerHand.Remove(card);
-                        discardDeck.Add(card);
-                    }
+                    // add to discard pile and remove from hand
+                    GameObject card = playerHand[0];
+                    Vector3 newPos = discardPile.transform.position;
+                    card.GetComponent<Card>().SetTargetPos(newPos);
+                    playerHand.Remove(card);
+                    discardDeck.Add(card);
                 }
 
                 if (timer <= -175)
@@ -267,8 +259,57 @@ public class CardGameManager : MonoBehaviour
 
                     timer = maxTimer;
                 }
+
+                for (int i = 0; i < discardDeck.Count; i++)
+                {
+                    // moving the last thing in the list to the front. 
+                    var moveToFirst = discardDeck.Last();
+                    discardDeck.RemoveAt(discardDeck.Count - 1);
+                    discardDeck.Insert(0, moveToFirst);
+                }
                 break;
             case GameState.RESHUFFLE:
+                timer--;
+                if (timer == 5)
+                {
+                    //play audio
+                }
+                for (var i = 0; i < discardDeck.Count; i++)
+                {
+                    if (timer < 0 - i * 2)
+                    {
+                        // flipping the cards to be the back
+                        discardDeck[i].GetComponent<Card>().CardBacks();
+
+                        // mmoving the cards to the place where the deck is
+                        Vector3 newPos = deckPos.transform.position;
+                        discardDeck[i].GetComponent<Card>().SetTargetPos(newPos);
+
+                    }
+
+                    if (timer < -90 - i)
+                    {
+                        // shuffling the discard deck
+                        GameObject temp = discardDeck[i];
+                        int randomIndex = Random.Range(i, discardDeck.Count);
+                        discardDeck[i] = discardDeck[randomIndex];
+                        discardDeck[randomIndex] = temp;
+
+                        // adding it back to the deck
+                        GameObject card = discardDeck[i];
+                        DeckManager.deck.Add(card);
+                        discardDeck.Remove(card);
+                    }
+                }
+                // if the deck has 24 cards
+                if (DeckManager.deck.Count == 24)
+                {
+                    if (timer < -240)
+                    {
+                        state = GameState.COMPDEAL;
+                    }
+                    
+                }
                 break;
         }
     }

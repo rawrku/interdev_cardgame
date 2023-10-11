@@ -53,6 +53,11 @@ public class Card : MonoBehaviour
         myRenderer.sprite = faceSprite;
     }
 
+    public void CardBacks()
+    {
+        myRenderer.sprite = backSprite;
+    }
+
     private void Update()
     {
         transform.position = Vector3.Lerp(transform.position, targetPos, moveSpeed);
