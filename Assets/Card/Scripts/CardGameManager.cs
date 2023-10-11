@@ -412,8 +412,8 @@ public class CardGameManager : MonoBehaviour
     void Win()
     {
         source.PlayOneShot(win);
-        scoreMan.playerScore += 1;
-        scoreMan.compScore -= 1;
+        scoreMan.AddPlayerPoint();
+        scoreMan.MinusCompPoint();
         state = GameState.DISCARD;
     }
     void Tie()
@@ -423,8 +423,8 @@ public class CardGameManager : MonoBehaviour
     void Loose()
     {
         source.PlayOneShot(loose);
-        scoreMan.playerScore -= 1;
-        scoreMan.compScore += 1;
+        scoreMan.MinusPlayerPoint();
+        scoreMan.AddCompPoint();
         state = GameState.DISCARD;
     }
 }

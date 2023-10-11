@@ -16,11 +16,6 @@ public class DeckManager : MonoBehaviour
     //list for the deck
     public static List<GameObject> deck = new List<GameObject>();
 
-    //List<int> allScores = new List<int>();
-    //List<string> studentNames = new List<string>();
-
-    //public Card card;
-
     private void Start()
     {
         //card = GetComponent<Card>();
