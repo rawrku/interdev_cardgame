@@ -75,7 +75,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: ca5848f39d8456f4a9e96b8963bbb8aa, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 752e93d73249e9343af08f3b3b796b77, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -130,6 +130,6 @@ MonoBehaviour:
   hovered: 0
   picked: 0
   cardValue: 3
-  rockSprite: {fileID: 21300000, guid: bbf82b246db8ffa4bad59a288a4b7049, type: 3}
-  paperSprite: {fileID: 21300000, guid: 83ace72bb8fee1c44986e4ae491f616a, type: 3}
-  scissorsSprite: {fileID: 21300000, guid: cdec885b6590528419fd0cdadfbea29e, type: 3}
+  rockSprite: {fileID: 21300000, guid: eaf52f0d300feb3438966f41af9b8f71, type: 3}
+  paperSprite: {fileID: 21300000, guid: 31cf7c350e506e344afd339499464f70, type: 3}
+  scissorsSprite: {fileID: 21300000, guid: ac586d58c8d03bd4b800c306ac6026b1, type: 3}

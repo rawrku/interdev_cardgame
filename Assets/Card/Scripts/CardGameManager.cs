@@ -18,9 +18,10 @@ public class CardGameManager : MonoBehaviour
         RESHUFFLE
     }
 
-
+    // game state setting
     public static GameState state;
 
+    //discrad pile and shuffling vars
     public Transform discardPile;
     public static List<GameObject> discardDeck = new List<GameObject>();
     public Transform deckPos;
@@ -51,6 +52,13 @@ public class CardGameManager : MonoBehaviour
     bool eval;
     public Score scoreMan;
     public Card card;
+
+    // audio vars
+    public AudioSource source;
+    public AudioClip win;
+    public AudioClip loose;
+    public AudioClip place;
+    public AudioClip shuffle;
 
     private void Start()
     {
@@ -137,6 +145,7 @@ public class CardGameManager : MonoBehaviour
                         GameObject pickedCard = playerHand[i];
                         Vector3 newPos = playerCard.transform.position;
                         pickedCard.GetComponent<Card>().SetTargetPos(newPos);
+                        source.PlayOneShot(place);
                         playerPlayed = pickedCard;
                         state = GameState.RESOLVE;
                     }
@@ -180,6 +189,7 @@ public class CardGameManager : MonoBehaviour
                             card.GetComponent<Card>().SetTargetPos(newPos);
                             computerHand.Remove(card);
                             discardDeck.Add(card);
+                            source.PlayOneShot(place);
                         }
                     }
                 }
@@ -196,6 +206,7 @@ public class CardGameManager : MonoBehaviour
                             card.GetComponent<Card>().SetTargetPos(newPos);
                             playerHand.Remove(card);
                             discardDeck.Add(card);
+                            source.PlayOneShot(place);
                         }
                     }
                 }
@@ -210,6 +221,7 @@ public class CardGameManager : MonoBehaviour
                     card.GetComponent<Card>().SetTargetPos(newPos);
                     computerHand.Remove(card);
                     discardDeck.Add(card);
+                    source.PlayOneShot(place);
                 }
 
                 if (timer <= -130 && computerHand.Count == 1)
@@ -234,6 +246,7 @@ public class CardGameManager : MonoBehaviour
                     card.GetComponent<Card>().SetTargetPos(newPos);
                     playerHand.Remove(card);
                     discardDeck.Add(card);
+                    source.PlayOneShot(place);
                 }
 
                 //15 sec later, if player hand has 1 card
@@ -245,6 +258,7 @@ public class CardGameManager : MonoBehaviour
                     card.GetComponent<Card>().SetTargetPos(newPos);
                     playerHand.Remove(card);
                     discardDeck.Add(card);
+                    source.PlayOneShot(place);
                 }
 
                 if (timer <= -175)
@@ -272,7 +286,7 @@ public class CardGameManager : MonoBehaviour
                 timer--;
                 if (timer == 5)
                 {
-                    //play audio
+                    source.PlayOneShot(shuffle);
                 }
                 for (var i = 0; i < discardDeck.Count; i++)
                 {
@@ -322,6 +336,7 @@ public class CardGameManager : MonoBehaviour
         newPos.x = newPos.x + (2f * computerHand.Count);
         nextCard.GetComponent<Card>().SetTargetPos(newPos);
         computerHand.Add(nextCard);
+        source.PlayOneShot(place);
         DeckManager.deck.Remove(nextCard);
     }
     void PlayerDealCard()
@@ -332,6 +347,7 @@ public class CardGameManager : MonoBehaviour
         newPos.x = newPos.x + (2f * playerHand.Count);
         nextCard.GetComponent<Card>().SetTargetPos(newPos);
         playerHand.Add(nextCard);
+        source.PlayOneShot(place);
         DeckManager.deck.Remove(nextCard);
     }
 
@@ -340,6 +356,7 @@ public class CardGameManager : MonoBehaviour
         GameObject randomCard = computerHand[Random.Range(0, 2)];
         Vector3 newPos = compCard.transform.position;
         randomCard.GetComponent<Card>().SetTargetPos(newPos);
+        source.PlayOneShot(place);
         compPlayed = randomCard;
     }
     void Evaluate()
@@ -394,6 +411,7 @@ public class CardGameManager : MonoBehaviour
     }
     void Win()
     {
+        source.PlayOneShot(win);
         scoreMan.playerScore += 1;
         scoreMan.compScore -= 1;
         state = GameState.DISCARD;
@@ -404,6 +422,7 @@ public class CardGameManager : MonoBehaviour
     }
     void Loose()
     {
+        source.PlayOneShot(loose);
         scoreMan.playerScore -= 1;
         scoreMan.compScore += 1;
         state = GameState.DISCARD;
